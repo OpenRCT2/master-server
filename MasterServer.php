@@ -1,13 +1,19 @@
 <?php
 
-error_reporting(E_NONE);
+error_reporting(0);
 
-$db = new SQLite3('servers.db');
+$db = new SQLite3('../servers.db');
 $db->exec('CREATE TABLE IF NOT EXISTS servers (key STRING, time INTEGER, address STRING, port INTEGER, name STRING, haspassword INTEGER, description STRING, version STRING, players INTEGER, maxplayers INTEGER);');
 
 $address = $_SERVER['REMOTE_ADDR'];
-$port = intval($_GET['port']);
-$key = $_GET['key'];
+$port = null;
+if (isset($_GET['port'])) {
+	$port = intval($_GET['port']);
+}
+$key = null;
+if (isset($_GET['key'])) {
+	$key = $_GET['key'];
+}
 
 function request_gameinfo($address, $port){
 	$NETWORK_COMMAND_GAMEINFO = pack("nN", 4, 9);
