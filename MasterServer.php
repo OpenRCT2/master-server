@@ -3,7 +3,8 @@
 error_reporting(0);
 
 $db = new SQLite3('../servers.db');
-$db->exec('CREATE TABLE IF NOT EXISTS servers (key STRING, time INTEGER, address STRING, port INTEGER, name STRING, haspassword INTEGER, description STRING, version STRING, players INTEGER, maxplayers INTEGER);');
+$db->exec("CREATE TABLE IF NOT EXISTS servers (key STRING, time INTEGER, address STRING, port INTEGER, name STRING, haspassword INTEGER, description STRING, version STRING, players INTEGER, maxplayers INTEGER);");
+$db->exec("CREATE UNIQUE INDEX addr_idx ON servers(address, port);");
 
 $address = $_SERVER['REMOTE_ADDR'];
 $port = null;
@@ -40,27 +41,29 @@ function update_server($data){
 	global $db;
 	global $address;
 	global $port;
+	global $key;
 	if($data){
+		$stmt = $db->prepare("INSERT OR REPLACE INTO servers VALUES (:key, DATETIME('NOW'), :address, :port, :name, :haspassword, :description, :version, :players, :maxplayers);");
+
+		$stmt->bindValue(':key', $key);
+		$stmt->bindValue(':address', $address);
+		$stmt->bindValue(':port', $port);
+
 		$obj = json_decode($data);
-		$key = SQLite3::escapeString($key);
-		$name = SQLite3::escapeString($obj->name);
-		$haspassword = SQLite3::escapeString($obj->haspassword);
-		$description = SQLite3::escapeString($obj->description);
-		$version = SQLite3::escapeString($obj->version);
-		$players = SQLite3::escapeString($obj->players);
-		$maxplayers = SQLite3::escapeString($obj->maxplayers);
-		$result = $db->query("SELECT * FROM servers WHERE address = '$address'");
-		if($result->fetchArray()){
-			$db->exec("UPDATE servers SET key = '$key', time = datetime('now'), name = '$name', haspassword = '$haspassword', description = '$description', version = '$version', players = '$players', maxplayers = '$maxplayers' WHERE address = '$address'");
-		}else{
-			$db->exec("INSERT INTO servers (key, time, address, port, name, haspassword, description, version, players, maxplayers) VALUES ('$key', datetime('now'), '$address', '$port', '$name', '$haspassword', '$description', '$version', '$players', '$maxplayers')");
-		}
+		$stmt->bindValue(':name', $obj->name);
+		$stmt->bindValue(':haspassword', $obj->haspassword);
+		$stmt->bindValue(':description', $obj->description);
+		$stmt->bindValue(':version', $obj->version);
+		$stmt->bindValue(':players', $obj->players);
+		$stmt->bindValue(':maxplayers', $obj->maxplayers);
+
+		$stmt->execute();
 	}
 }
 
 function remove_old_servers(){
 	global $db;
-	$result = $db->query("DELETE FROM servers WHERE time < datetime('now', '-70 seconds')");
+	$result = $db->query("DELETE FROM servers WHERE time < DATETIME('now', '-70 seconds');");
 }
 
 function list_servers(){
