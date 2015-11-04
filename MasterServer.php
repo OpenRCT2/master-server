@@ -41,12 +41,15 @@ function update_server($data){
 	global $db;
 	global $address;
 	global $port;
+	global $key;
 	if($data){
 		$stmt = $db->prepare("INSERT OR REPLACE INTO servers VALUES (:key, DATETIME('NOW'), :address, :port, :name, :haspassword, :description, :version, :players, :maxplayers);");
 
 		$stmt->bindValue(':key', $key);
 		$stmt->bindValue(':address', $address);
 		$stmt->bindValue(':port', $port);
+
+		$obj = json_decode($data);
 		$stmt->bindValue(':name', $obj->name);
 		$stmt->bindValue(':haspassword', $obj->haspassword);
 		$stmt->bindValue(':description', $obj->description);
