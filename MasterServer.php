@@ -21,15 +21,12 @@ class MasterServer {
 		$this->db->exec("CREATE UNIQUE INDEX addr_idx ON servers(address, port);");
 	}
 
-	public function request_gameinfo($address=null, $port=null) {
-		$address = $address ?: $this->address;
-		$port = $port ?: $port;
-
+	public function request_gameinfo() {
 		$NETWORK_COMMAND_GAMEINFO = pack("nN", 4, 9);
 		$sock                     = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 		socket_set_option($sock, SOL_SOCKET, SO_SNDTIMEO, array('sec' => 5, 'usec' => 5000));
-
-		if(socket_connect($sock, $address, $port) === TRUE) {
+		
+		if(socket_connect($sock, $this->address, $this->port) === TRUE) {
 			$info_len = strlen($NETWORK_COMMAND_GAMEINFO);
 			if(socket_write($sock, $NETWORK_COMMAND_GAMEINFO, $info_len) == $info_len) {
 				if(socket_recv($sock, $size, 2, MSG_WAITALL) == 2) {
