@@ -1,0 +1,33 @@
+extends layout
+
+block content
+  if error
+    p Whooops!!
+    p= message
+  else
+    p Public server list
+    table.serverList
+      thead
+        tr
+          td Name
+          td Description
+          td Version
+          td Password Protected
+          td Players
+          td Dedicated server
+        if data.length > 0
+          tbody
+            for server in data
+              tr
+                td
+                  a(href="/"+server.serverId)= server.name
+                td= server.description
+                td= server.version
+                td= server.requiresPassword ? "Yes" : "No"
+                td #{server.players}/#{server.maxPlayers}
+                td= server.dedicated ? "Yes" : "No" 
+                
+    if data.length == 0
+      p No public servers registered at the moment. Check back later.
+  
+      

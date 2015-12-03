@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  a(href='/') Back to server list
+  if error
+    p Whooops!!
+    p= message
+  else
+    p Server listing for #{server.name}
+    p Server Name: #{server.name}
+    p Server Description: #{server.description}
+    p Dedicated Server: #{server.dedicated ? "Yes" : "No"} 
+    p Players: #{server.players}/#{server.maxPlayers}
+    p Password protected: #{server.requiresPassword ? "Yes" : "No"}
+    p Map size: #{server.gameInfo.mapSize} x #{server.gameInfo.mapSize}
+    p Game date: #{server.customGI.day}, #{server.customGI.month}, Year #{server.customGI.year}
+    p Park value: £#{server.customGI.parkValue}
+    p Cash: #{server.gameInfo.cash != null ? "£"+server.customGI.cash : "Money disabled"}
+    p Guests: #{server.customGI.guests}
+    p Provider Name: #{server.provider.name}
+    p Provider Email: 
+      a(href="mailto:"+server.provider.email) #{server.provider.email}
+    p Provider Website: 
+      a(href=server.provider.website) #{server.provider.website}

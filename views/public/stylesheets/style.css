@@ -1,0 +1,60 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: #5BA3E7;
+  
+}
+
+.wrapper {
+  margin: 0 auto;
+  width: 960px;
+  text-align: center;
+  color: white;
+}
+
+a {
+  color: #ffffff;
+}
+
+.brand {
+  width: 128px;
+  height: 128px;
+  color: white;
+  text-shadow: 2px 2px 2px #000, -2px -2px 2px #000, 2px -2px 2px #000, -2px 2px 2px #000;
+  text-align: center;
+  line-height: 128px;
+  background: url("../images/icon_x128.png") center center no-repeat;
+  display: block;
+  text-decoration: none;
+  margin: 0 auto;
+}
+
+.serverList {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+  border-spacing: 0px;
+  border-collapse: collapse;
+}
+
+.serverList > thead > tr > td {
+  font-weight: bold;
+  vertical-align: bottom;
+  border-bottom: 2px solid #DDD;
+  padding: 8px;
+  line-height: 1.42857;
+}
+
+.serverList > tbody > tr > td {
+  padding: 8px;
+  line-height: 1.42857;
+  vertical-align: top;
+  border-top: 1px solid #DDD;
+}
+
+@media screen and (max-width: 960px) {
+  .wrapper {
+    margin: 0;
+    width: 100%;
+  }
+}

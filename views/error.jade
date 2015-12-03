@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  a.backTo(href='/') Back to server list
+  h1= message
+  h2= error.status
+  pre #{error.stack}
