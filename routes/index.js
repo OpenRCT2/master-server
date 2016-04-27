@@ -17,9 +17,15 @@ var requestGameInfo = function requestGameInfo(req, res, address, port, key) {
     hasErrors = true;
     socket.destroy();
   })
-  socket.connect(port, address, function() {
-    socket.write(netComGI);
-  });
+  try { 
+    socket.connect(port, address, function() {
+      socket.write(netComGI);
+    });
+  } catch (e) {
+    errors = e;
+    console.error(e);
+    hasErrors = true;
+  }
   
   socket.on('data', function (bdata) {
     var buffData = bdata.toJSON().data;
