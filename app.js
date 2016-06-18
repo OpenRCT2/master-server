@@ -10,7 +10,12 @@ var autoIncrement = require('mongoose-auto-increment');
 var mongoose = require('mongoose');
 var dbConnectionString = process.env.MONGOLAB_URI || process.env.MONGODB_URI || 'mongodb://localhost/orctmaster';
 
-mongoose.connect(dbConnectionString, function(err) {
+var options = {
+  server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } },
+  replset: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } }
+};
+
+mongoose.connect(dbConnectionString, options, function(err) {
     if(err) {
         console.log('database connection error', err);
     } else {
